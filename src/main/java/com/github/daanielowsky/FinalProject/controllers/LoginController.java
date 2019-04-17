@@ -34,9 +34,10 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new RegistrationFormDTO());
         return "loginpage";
     }
+
 
     @PostMapping("/login")
     public String loginValidation(@Valid @ModelAttribute User user, BindingResult result, HttpSession session){

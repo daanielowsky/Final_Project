@@ -1,0 +1,32 @@
+body {
+    background-color: white;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 30px;
+}
+
+.header {
+    background-color: #bfbfbf;
+    padding: 30px;
+    text-align: center;
+}
+
+#data {
+    padding: 10px;
+    color: #585858;
+    font-weight: bold;
+}
+.container {
+    border: 1px solid black;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #bfbfbf;
+}
+
+.boxes {
+    font-weight: bold;
+    width: 40%;
+    height: 80%;
+    margin: 10px 50px;
+    display: inline-block;
+}

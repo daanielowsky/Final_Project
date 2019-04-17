@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -8,73 +9,45 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>meKnife - Rejestracja</title>
-    <style>
-        body {
-            background-color: white;
-            margin-left: 10%;
-            margin-right: 10%;
-            margin-top: 30px;
-        }
+    <link rel="stylesheet" href="media/css/style.css">
 
-        .header {
-            background-color: #bfbfbf;
-            padding: 30px;
-            text-align: center;
-        }
-
-        #data {
-            padding: 10px;
-            color: #585858;
-            font-weight: bold;
-        }
-
-    </style>
 </head>
 <body>
-<div class="wrapper">
-    <p style="float: left" id="data"> Teraz mamy: ${date}.</p>
-    <p style="float: right">
-        <button type="button" onclick="javascript:document.location.href='/login'" class="btn btn-secondary btn-lg">
-            Zaloguj
-        </button>
-        <button type="button" onclick="javascript:document.location.href='/register'" class="btn btn-secondary btn-lg">
-            Zarejestruj się
-        </button>
-    </p>
-</div>
-<div class="header">
-    <br>
-    <br>
-    <br>
-    <p><a href="/"><img src="https://i.ibb.co/zHrRg6Q/Cool-Text-meknife-321318491053171.png" border="0"></a></p>
-</div>
-<div>
-    szukajka
-</div>
+<jsp:include page="header.jsp"/>
 <br>
-<section style="background-color: #bfbfbf">
-    <div style="font-weight: bold; float: right; padding: 10px;background-color: #bfbfbf">
+<div class="container">
+    <div class="boxes">
+        <p>
+        <h2>Zaloguj się</h2></p>
+        <form method="post" action="/login">
+            <c:if test="${param.error !=null}">
+                <span class="alert alert-danger">Nieprawidłowe dane logowania</span>
+            </c:if>
+            <c:if test="${param.logout != null}">
+                <span class="alert alert-success">Zostałeś wylogowany</span>
+            </c:if>
+            <br>
+            <br>
+            <p>Nazwa użytkownika: <input type="text" class="form-control" name="username" placeholder="Nazwa użytkownika" required min="3" max="20"></p>
+            <p>Hasło: <input type="password" class="form-control" name="password" placeholder="Hasło" required min="3" max="20"></p>
+            <p>Remember me <input type="checkbox" name="remember-me"></p>
+            <br>
+            <button class="btn btn-dark">Zaloguj się</button>
+        </form>
+    </div>
+    <div class="boxes">
         <p>
         <h2>Nie masz jeszcze konta? Zarejestruj się</h2></p>
         <form:form modelAttribute="user" method="post" action="/register">
-            <p>Imię i nazwisko: <form:input cssClass="form-control" cssStyle="width: 50%" path="fullName"/> <form:errors path="fullName"
-                                                                           cssClass="alert alert-danger"/></p>
-            <p>Nazwa użytkownika: <form:input cssClass="form-control" cssStyle="width: 50%" path="username"/> <form:errors path="username" cssClass="alert alert-danger"/></p>
-            <p>Hasło: <form:password cssClass="form-control" cssStyle="width: 50%" path="password"/> <form:errors path="password" cssClass="alert alert-danger"/></p>
+            <p>Imię i nazwisko: <form:input cssClass="form-control" path="fullName"/>       <form:errors path="fullName" cssClass="alert alert-danger"/></p>
+            <p>Nazwa użytkownika: <form:input cssClass="form-control" path="username" />       <form:errors path="username" cssClass="alert alert-danger"/> </p>
+            <p>Hasło: <form:password cssClass="form-control" path="password"/>      <form:errors path="password" cssClass="alert alert-danger"/> </p>
+            <p>Powtórz hasło: <form:password cssClass="form-control" path="confirmedPassword"/>      <form:errors path="confirmedPassword" cssClass="alert alert-danger"/> </p>
             <br>
-            <button class="btn btn-dark">Zarejestruj się</button>
+            <button class="btn btn-dark" >Zarejestruj się</button>
+            <button class="btn btn-dark" type="reset">Reset</button>
         </form:form>
     </div>
-    <div style="font-weight: bold; float: left; padding: 10px;background-color: #bfbfbf">
-        <p>
-        <h2>Zaloguj się</h2></p>
-        <form:form modelAttribute="user" method="post">
-            <p>Nazwa użytkownika: <form:input cssClass="form-control" path="username"/> <form:errors path="username" cssClass="alert alert-danger"/></p>
-            <p>Hasło: <form:password cssClass="form-control" path="password"/> <form:errors path="password" cssClass="alert alert-danger"/></p>
-            <br>
-            <button class="btn btn-dark">Zaloguj się</button>
-        </form:form>
-    </div>
-</section>
+</div>
 </body>
 </html>

@@ -7,6 +7,8 @@ import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +22,22 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User getLoggedUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findFirstByUsername(username).orElse(null);
     }
 
     @Transactional
     public void registerUser(RegistrationFormDTO form) {
         User user = convertToUser(form);
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         logger.info("Rejestracja użytkownika:" + user);
         userRepository.save(user);
         logger.info("Zarejestrowany użytkownik:" + user.getId());
