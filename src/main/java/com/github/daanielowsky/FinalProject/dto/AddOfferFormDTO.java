@@ -26,6 +26,10 @@ public class AddOfferFormDTO {
     @NotNull
     private String price;
 
+    private String contentType;
+
+    private byte[] image;
+
 
 
 }

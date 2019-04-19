@@ -14,4 +14,6 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     List<Offer> getAllByTitleLike(String title);
     List<Offer> getAllByUser(User user);
     List<Offer> getAllByCategory(Category category);
+    @Query("select o from Offer o order by created desc")
+    List<Offer> getFirstTen();
 }

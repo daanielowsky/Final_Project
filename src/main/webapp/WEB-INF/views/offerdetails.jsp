@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,28 +13,19 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
-<div>
-    <table class="table table-bordered" style="background-color: #bfbfbf">
-        <thead>
-        <tr>
-            <th scope="col">Tytuł</th>
-            <th scope="col">Opis</th>
-            <th scope="col">Kategoria</th>
-            <th scope="col">Cena</th>
-        </tr>
-        </thead>
-        <c:forEach items="${oferts}" var="ofert">
-            <tbody>
-            <tr>
-                <td><a href="/offer/${ofert.id}">${ofert.title}</a></td>
-                <td>${ofert.description}</td>
-                <td>${ofert.category}</td>
-                <td>${ofert.price}</td>
-                </td>
-            </tr>
-            </tbody>
-        </c:forEach>
-    </table>
+<br>
+<div class="container">
+    <center>
+        <h2>Tytuł aukcji: ${dto.title}</h2>
+        <img src="/offer/${dto.id}/image">
+        <br>
+        <br>
+        <h2>Cena: ${dto.price} PLN</h2>
+        <br>
+        <br>
+        <h2>Opis: </h2>
+        <h3>${dto.description}</h3>
+    </center>
 </div>
 </body>
 </html>

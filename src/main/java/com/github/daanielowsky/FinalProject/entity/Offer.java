@@ -24,6 +24,9 @@ public class Offer {
     @ManyToOne
     private Category category;
 
+    @Column(name = "image_type")
+    private String imageType;
+
     private LocalDateTime created;
 
     private String price;
@@ -36,6 +39,25 @@ public class Offer {
         this.price = price;
     }
 
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    @Basic(fetch = FetchType.LAZY)
     private byte[] file;
 
     @PrePersist

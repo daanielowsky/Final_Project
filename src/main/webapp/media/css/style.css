@@ -1,5 +1,5 @@
 body {
-    background-color: white;
+    background-image: url("https://i.ibb.co/QkX9TJn/repeatable-bg.png");
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 30px;
@@ -9,6 +9,7 @@ body {
     background-color: #bfbfbf;
     padding: 30px;
     text-align: center;
+    border: 1px solid black;
 }
 
 #data {
@@ -16,6 +17,7 @@ body {
     color: #585858;
     font-weight: bold;
 }
+
 .container {
     border: 1px solid black;
     margin-bottom: 10px;
@@ -29,4 +31,11 @@ body {
     height: 80%;
     margin: 10px 50px;
     display: inline-block;
+}
+
+.registerpage {
+    font-weight: bold;
+    padding: 10px;
+    background-color: #bfbfbf;
+    border: 1px solid black;
 }

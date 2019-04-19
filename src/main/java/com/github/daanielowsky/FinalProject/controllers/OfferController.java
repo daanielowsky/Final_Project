@@ -1,16 +1,25 @@
 package com.github.daanielowsky.FinalProject.controllers;
 
 import com.github.daanielowsky.FinalProject.dto.AddOfferFormDTO;
+import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
+import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.services.OfferService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class OfferController {
@@ -34,10 +43,12 @@ public class OfferController {
     }
 
     @PostMapping("/addoffer")
-    public String addOffer(@Valid @ModelAttribute ("addoffer") AddOfferFormDTO offerform, BindingResult result){
+    public String addOffer(@Valid @ModelAttribute ("addoffer") AddOfferFormDTO offerform, BindingResult result, @RequestParam MultipartFile offerImage) throws IOException {
         if (result.hasErrors()){
             return "addoffer";
         }
+        offerform.setContentType(offerImage.getContentType());
+        offerform.setImage(offerImage.getBytes());
         offerService.registerOffer(offerform);
         return "redirect:/";
     }
@@ -51,47 +62,26 @@ public class OfferController {
     @GetMapping("/searchoffers")
     public String searchOffers(@RequestParam String title, Model model){
         String[] s = title.split(" ");
-        for(String gettitle : s){
-            model.addAttribute("offers", offerService.showAllOffersWithTitleLike(gettitle));
-        }
+        List<Offer> offers = new LinkedList<>();
+        Arrays.asList(s).stream().forEach(q -> offers.addAll(offerService.showAllOffersWithTitleLike(q)));
+        model.addAttribute("offers", offers);
         return "searchoffers";
     }
 
+    @GetMapping("/offer/{id}/image")
+    public ResponseEntity<Resource> getOfferImage(@PathVariable Long id) {
+        ResourceDTO offerImage = offerService.getOfferImage(id);
+        if (offerImage.getResource() != null) {
+            return ResponseEntity.ok().contentType(MediaType.valueOf(offerImage.getContentType())).body(offerImage.getResource());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-//    public String addOffer(MultipartHttpServletRequest request) {
-//        MultipartFile file = request.getFile("offert_file");
-//        try {
-//            byte[] bytes = file.getBytes();
-//            String contentType = file.getContentType();
-//            // image/jpeg
-//            // image/gif
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    @GetMapping("/offer/offerImage/{offerId}")
-//    public void getImage(@PathVariable Long offerId, HttpServletResponse response) throws IOException {
-//        String pathToFile = ";'klklklkl";
-//        String fileContentType = "image/jpeg";
-//
-//        Path path = Paths.get(pathToFile);
-//        File file = path.toFile();
-//
-//        response.setContentType(fileContentType);
-//        ServletOutputStream outputStream = response.getOutputStream();
-//        try {
-//            FileInputStream fileInputStream = new FileInputStream(file);
-//            int read = fileInputStream.read();
-//            outputStream.write(read);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
-
+    @GetMapping("/offer/{id}")
+    public String showCertainOffer(@PathVariable Long id, Model model){
+        Offer dto = offerService.getOfferByID(id);
+        model.addAttribute("dto", dto);
+        return "offerdetails";
+    }
 }

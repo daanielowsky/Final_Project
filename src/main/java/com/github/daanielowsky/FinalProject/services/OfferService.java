@@ -1,12 +1,14 @@
 package com.github.daanielowsky.FinalProject.services;
 
 import com.github.daanielowsky.FinalProject.dto.AddOfferFormDTO;
+import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.CategoryRepository;
 import com.github.daanielowsky.FinalProject.repositories.OfferRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class OfferService {
     private OfferRepository offerRepository;
     private CategoryRepository categoryRepository;
     private UserService userService;
+    private ResourceDTO resourceDTO;
 
     public OfferService(OfferRepository offerRepository, CategoryRepository categoryRepository, UserService userService) {
         this.offerRepository = offerRepository;
@@ -35,6 +38,8 @@ public class OfferService {
         Offer offer = convertToOffer(form);
         offer.setUser(userService.getLoggedUser());
         offer.setCategory(categoryRepository.getFirstByName(form.getCategory()));
+        offer.setImageType(form.getContentType());
+        offer.setFile(form.getImage());
         logger.info("Dodano ofertę:" + offer);
         offerRepository.save(offer);
         logger.info("Oferta o id:" + offer.getId());
@@ -47,8 +52,30 @@ public class OfferService {
     }
 
     @Transactional
+    public Offer getOfferByID(Long id){
+        return offerRepository.getOne(id);
+    }
+
+    @Transactional
     public List<Offer> showAllOffersWithTitleLike(String title){
         return offerRepository.getAllByTitleLike(title);
+    }
+
+    public ResourceDTO getOfferImage(Long id) {
+        ResourceDTO resourceDTO = new ResourceDTO();
+        Offer offer = offerRepository.getOne(id);
+        if (offer.getImageType() != null) {
+            ByteArrayResource resource = new ByteArrayResource(offer.getFile());
+            resourceDTO.setResource(resource);
+            resourceDTO.setContentType(offer.getImageType());
+        }
+        return resourceDTO;
+    }
+
+    @Transactional
+    public List<Offer> getFirstTenOffers() {
+        List<Offer> firstTen = offerRepository.getFirstTen();
+        return firstTen;
     }
 
 }
