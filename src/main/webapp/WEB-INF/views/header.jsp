@@ -25,6 +25,7 @@
             Opcje
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/editprofile">Edytuj profil</a>
             <a class="dropdown-item" href="/offers">Twoje oferty</a>
             <a class="dropdown-item" href="/addoffer">Dodaj ofertę</a>
             <div class="dropdown-divider"></div>

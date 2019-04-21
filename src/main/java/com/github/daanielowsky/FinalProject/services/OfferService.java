@@ -1,6 +1,7 @@
 package com.github.daanielowsky.FinalProject.services;
 
-import com.github.daanielowsky.FinalProject.dto.AddOfferFormDTO;
+import com.github.daanielowsky.FinalProject.dto.EditOfferDTO;
+import com.github.daanielowsky.FinalProject.dto.OfferDTO;
 import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.entity.User;
@@ -9,13 +10,13 @@ import com.github.daanielowsky.FinalProject.repositories.OfferRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 import java.util.List;
 
+import static com.github.daanielowsky.FinalProject.services.Converters.convertToDTO;
 import static com.github.daanielowsky.FinalProject.services.Converters.convertToOffer;
 
 @Service
@@ -34,7 +35,7 @@ public class OfferService {
     }
 
     @Transactional
-    public void registerOffer(AddOfferFormDTO form) {
+    public void registerOffer(OfferDTO form) {
         Offer offer = convertToOffer(form);
         offer.setUser(userService.getLoggedUser());
         offer.setCategory(categoryRepository.getFirstByName(form.getCategory()));
@@ -78,4 +79,18 @@ public class OfferService {
         return firstTen;
     }
 
+
+    @Transactional
+    public void deleteOffer(Long id){
+        Offer offerByID = getOfferByID(id);
+        offerRepository.delete(offerByID);
+    }
+
+    @Transactional
+    public EditOfferDTO getDTOforEdit(Long id){
+        Offer offerByID = getOfferByID(id);
+        EditOfferDTO editOfferDTO = convertToDTO(offerByID);
+        return editOfferDTO;
+
+    }
 }

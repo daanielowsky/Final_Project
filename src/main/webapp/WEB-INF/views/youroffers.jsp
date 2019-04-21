@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,6 +15,7 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
+<br>
 <div>
         <table class="table table-bordered" style="background-color: #bfbfbf">
             <thead>
@@ -34,7 +36,8 @@
                 <td>${ofert.description}</td>
                 <td>${ofert.category}</td>
                 <td>${ofert.price}</td>
-                <td><button class="btn btn-dark" onclick="javascript:document.location.href='/deleteoffer?id=${ofert.id}" >Usuń</button>
+                <td><button class="btn btn-dark" onclick="javascript:document.location.href='/deleteoffer?id=${ofert.id}'" >Usuń</button>
+                    <button class="btn btn-dark" onclick="javascript:document.location.href='/editoffer?id=${ofert.id}'" >Edytuj</button>
                 </td>
             </tr>
             </tbody>

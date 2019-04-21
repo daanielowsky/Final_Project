@@ -1,10 +1,6 @@
 package com.github.daanielowsky.FinalProject.entity;
 
-import com.github.daanielowsky.FinalProject.validation.RegistrationValidationGroup;
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.persistence.*;
-import javax.validation.groups.Default;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,6 +21,28 @@ public class User {
     private String password;
 
     private LocalDateTime created;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column (nullable = false)
+    private Long phoneNumber;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @PrePersist
     public void prePersist(){

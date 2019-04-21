@@ -1,6 +1,7 @@
 package com.github.daanielowsky.FinalProject.services;
 
 
+import com.github.daanielowsky.FinalProject.dto.EditUserDTO;
 import com.github.daanielowsky.FinalProject.dto.RegistrationFormDTO;
 import com.github.daanielowsky.FinalProject.dto.UserDTO;
 import com.github.daanielowsky.FinalProject.entity.User;
@@ -11,11 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-import static com.github.daanielowsky.FinalProject.services.Converters.convertToUser;
-import static com.github.daanielowsky.FinalProject.services.Converters.convertToUserDTO;
+import static com.github.daanielowsky.FinalProject.services.Converters.*;
 
 @Service
 public class UserService {
@@ -43,6 +44,7 @@ public class UserService {
         logger.info("Zarejestrowany użytkownik:" + user.getId());
     }
 
+    @Transactional
     public UserDTO findUser(String username) {
         if(username == null){
             throw new IllegalArgumentException("Nazwa użytkownika musi być podana");
@@ -56,5 +58,18 @@ public class UserService {
         logger.debug("Znaleziono użytkownika dla nazwy: " + username);
         return  convertToUserDTO(user);
     }
-
+    @Transactional
+    public EditUserDTO findUserforEdit(String username) {
+        if(username == null){
+            throw new IllegalArgumentException("Nazwa użytkownika musi być podana");
+        }
+        Optional<User> optionalUser  = userRepository.findFirstByUsername(username);
+        User user = optionalUser.orElse(null);
+        if (user == null) {
+            logger.debug("Nie znaleziono użytkownika dla nazwy: " + username);
+            return null;
+        }
+        logger.debug("Znaleziono użytkownika dla nazwy: " + username);
+        return  convertToEditUserDTO(user);
+    }
 }

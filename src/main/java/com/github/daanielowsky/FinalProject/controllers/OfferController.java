@@ -1,9 +1,14 @@
 package com.github.daanielowsky.FinalProject.controllers;
 
-import com.github.daanielowsky.FinalProject.dto.AddOfferFormDTO;
+import com.github.daanielowsky.FinalProject.dto.EditOfferDTO;
+import com.github.daanielowsky.FinalProject.dto.OfferDTO;
 import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.entity.Offer;
+import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.services.OfferService;
+import com.github.daanielowsky.FinalProject.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +29,10 @@ import java.util.List;
 @Controller
 public class OfferController {
 
+    private static Logger logger = LoggerFactory.getLogger(OfferController.class);
+
     private OfferService offerService;
+    private UserService userService;
 
 
     public OfferController(OfferService offerService) {
@@ -38,12 +46,12 @@ public class OfferController {
 
     @GetMapping("/addoffer")
     public String showOfferForm(Model model){
-        model.addAttribute("addoffer", new AddOfferFormDTO());
+        model.addAttribute("addoffer", new OfferDTO());
         return "addoffer";
     }
 
     @PostMapping("/addoffer")
-    public String addOffer(@Valid @ModelAttribute ("addoffer") AddOfferFormDTO offerform, BindingResult result, @RequestParam MultipartFile offerImage) throws IOException {
+    public String addOffer(@Valid @ModelAttribute ("addoffer") OfferDTO offerform, BindingResult result, @RequestParam MultipartFile offerImage) throws IOException {
         if (result.hasErrors()){
             return "addoffer";
         }
@@ -81,7 +89,50 @@ public class OfferController {
     @GetMapping("/offer/{id}")
     public String showCertainOffer(@PathVariable Long id, Model model){
         Offer dto = offerService.getOfferByID(id);
+        User user = dto.getUser();
         model.addAttribute("dto", dto);
+        model.addAttribute("user", user);
         return "offerdetails";
     }
+
+//    @GetMapping("/deleteoffer")
+//    public String deleteOffer(@RequestParam Long id, HttpServletResponse resp){
+//        User loggedUser = userService.getLoggedUser();
+//        Long userId = loggedUser.getId();
+//        Long offerUserId = offerService.getOfferByID(id).getUser().getId();
+//        if (userId == offerUserId){
+//            offerService.deleteOffer(id);
+//            return "redirect:offers";
+//        } else {
+//            resp.setStatus(403);
+//            return "index";
+//        }
+//    }
+
+    @GetMapping("/deleteoffer")
+    public String deleteOffer(@RequestParam Long id){
+        offerService.deleteOffer(id);
+        return "youroffers";
+    }
+
+    @GetMapping("/editoffer")
+    public String editOfferForm(@RequestParam Long id, Model model){
+        EditOfferDTO dtoforEdit = offerService.getDTOforEdit(id);
+        model.addAttribute("editoffer", dtoforEdit);
+        return "editoffer";
+    }
+
+    @PostMapping("/editoffer")
+    public String editForm(@RequestParam Long id, @Valid @ModelAttribute("editoffer") EditOfferDTO editoffer, BindingResult result){
+        if (result.hasErrors()){
+            return "editoffer";
+        }
+        Offer offerByID = offerService.getOfferByID(id);
+        offerByID.setPrice(editoffer.getPrice());
+        offerByID.setDescription(editoffer.getDescription());
+        offerByID.setTitle(editoffer.getTitle());
+        return "redirect:/offers";
+    }
+
+
 }
