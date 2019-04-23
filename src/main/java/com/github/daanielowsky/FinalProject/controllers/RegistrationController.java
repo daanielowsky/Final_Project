@@ -2,16 +2,17 @@ package com.github.daanielowsky.FinalProject.controllers;
 
 import com.github.daanielowsky.FinalProject.dto.RegistrationFormDTO;
 import com.github.daanielowsky.FinalProject.dto.UserDTO;
+import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import com.github.daanielowsky.FinalProject.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -33,6 +34,11 @@ public class RegistrationController {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
     }
 
+    @ModelAttribute("userprofile")
+    public User user(){
+        return userService.getLoggedUser();
+    }
+
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new RegistrationFormDTO());
@@ -41,7 +47,7 @@ public class RegistrationController {
 
 
     @PostMapping(value = "/register")
-    public String registerUser(@Valid @ModelAttribute("user") RegistrationFormDTO form, BindingResult result) {
+    public String registerUser(@Valid @ModelAttribute("user") RegistrationFormDTO form, BindingResult result, @RequestParam MultipartFile userImage) throws IOException {
         if (result.hasErrors()) {
             return "registerpage";
         }
@@ -55,6 +61,8 @@ public class RegistrationController {
             result.rejectValue("username", null, "Nazwa użytkownika już zajęta.");
             return "registerpage";
         }
+        form.setContentType(userImage.getContentType());
+        form.setImage(userImage.getBytes());
         userService.registerUser(form);
         return "redirect:/";
     }

@@ -28,6 +28,30 @@ public class User {
     @Column (nullable = false)
     private Long phoneNumber;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] file;
+
+    @Column(name = "image_type")
+    private String imageType;
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+
     public String getEmail() {
         return email;
     }

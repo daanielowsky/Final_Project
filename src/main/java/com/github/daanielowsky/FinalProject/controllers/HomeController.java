@@ -1,7 +1,9 @@
 package com.github.daanielowsky.FinalProject.controllers;
 
 
+import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.services.OfferService;
+import com.github.daanielowsky.FinalProject.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +16,12 @@ import java.time.format.DateTimeFormatter;
 public class HomeController {
 
     private OfferService offerService;
+    private UserService userService;
 
-    public HomeController(OfferService offerService) {
+
+    public HomeController(OfferService offerService, UserService userService) {
         this.offerService = offerService;
+        this.userService = userService;
     }
 
     @GetMapping("/")
@@ -28,5 +33,10 @@ public class HomeController {
     @ModelAttribute("date")
     public String actualDate(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
+
+    @ModelAttribute("userprofile")
+    public User user(){
+        return userService.getLoggedUser();
     }
 }

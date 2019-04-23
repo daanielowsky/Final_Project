@@ -15,10 +15,10 @@ public class Offer {
     @ManyToOne
     private User user;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne
@@ -61,7 +61,7 @@ public class Offer {
     private byte[] file;
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         created = LocalDateTime.now();
     }
 

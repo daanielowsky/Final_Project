@@ -2,6 +2,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.net.URI" %>
+<%@ page import="com.github.daanielowsky.FinalProject.services.UserService" %>
+<%@ page import="com.github.daanielowsky.FinalProject.entity.User" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <sec:authorize access="!isAuthenticated()">
@@ -26,6 +28,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="/editprofile">Edytuj profil</a>
+            <a class="dropdown-item" href="/user/${userprofile.id}">Twój profil</a>
             <a class="dropdown-item" href="/offers">Twoje oferty</a>
             <a class="dropdown-item" href="/addoffer">Dodaj ofertę</a>
             <div class="dropdown-divider"></div>

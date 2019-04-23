@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page import="java.net.URI" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,39 +16,14 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
-<br>
-<div class="container">
-    <h2>Informacje o sprzedawcy:</h2>
-    <sec:authorize access="!isAuthenticated()">
-        <center>
-
-        <div class="panel panel-danger" style="width: 50%">
-
-                Aby zobaczyć informacje o sprzedawcy musisz się <a href="/login">zalogować</a>.
-        </div>
-        </center>
-    </sec:authorize>
-    <sec:authorize access="isAuthenticated()">
-        <br>
-        <h4>Imię i nazwisko: ${user.fullName}</h4>
-        <h4>Email: ${user.email}</h4>
-        <h4>Numer kontaktowy: ${user.phoneNumber}</h4>
-        <h4>Profil: <a href="/user/${user.id}"> >>KLIK<< </a> </h4>
-    </sec:authorize>
+<div class="registerpage">
     <center>
-        <h2>Tytuł aukcji: ${dto.title}</h2>
-        <img class="img-rounded" alt="Cinque Terre" src="/offer/${dto.id}/image">
+        <h1 style="color: red; font-weight: bold">Chyba sobie za dużo pozwalasz!</h1>
         <br>
         <br>
-        <h2>Cena: ${dto.price} PLN</h2>
-        <br>
-        <br>
-        <h2>Opis: </h2>
-        <h3>${dto.description}</h3>
-        <br>
-        <br>
-
+        <p>Wróć na stronę główną <a href="/"> >> KLIK << </a> </p>
     </center>
+
 </div>
 </body>
 </html>

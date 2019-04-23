@@ -3,18 +3,18 @@ package com.github.daanielowsky.FinalProject.controllers;
 
 import com.github.daanielowsky.FinalProject.dto.EditUserDTO;
 import com.github.daanielowsky.FinalProject.dto.RegistrationFormDTO;
-import com.github.daanielowsky.FinalProject.dto.UserDTO;
+import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import com.github.daanielowsky.FinalProject.services.UserService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -36,6 +36,11 @@ public class LoginController {
     @ModelAttribute("date")
     public String actualDate(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
+
+    @ModelAttribute("userprofile")
+    public User user(){
+        return userService.getLoggedUser();
     }
 
     @GetMapping("/login")
@@ -76,6 +81,24 @@ public class LoginController {
         loggedUser.setPhoneNumber(editUserDTO.getPhoneNumber());
         loggedUser.setEmail(editUserDTO.getEmail());
         loggedUser.setFullName(editUserDTO.getFullName());
-        return "redirect:/";
+        userRepository.save(loggedUser);
+        return "index";
+    }
+
+    @GetMapping("/user/{id}")
+    public String showProfile(@PathVariable Long id, Model model){
+        User userById = userService.getUserById(id);
+        model.addAttribute("userdetails", userById);
+        return "userdetails";
+    }
+
+    @GetMapping("/user/{id}/image")
+    public ResponseEntity<Resource> getUserImage(@PathVariable Long id) {
+        ResourceDTO userImage = userService.getUserImage(id);
+        if (userImage.getResource() != null) {
+            return ResponseEntity.ok().contentType(MediaType.valueOf(userImage.getContentType())).body(userImage.getResource());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

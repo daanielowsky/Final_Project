@@ -25,4 +25,8 @@ public class RegistrationFormDTO {
     @NotBlank
     @Email
     private String email;
+
+    private String contentType;
+
+    private byte[] image;
 }

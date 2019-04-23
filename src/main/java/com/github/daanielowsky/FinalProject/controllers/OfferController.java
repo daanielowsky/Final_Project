@@ -5,6 +5,8 @@ import com.github.daanielowsky.FinalProject.dto.OfferDTO;
 import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.entity.User;
+import com.github.daanielowsky.FinalProject.repositories.OfferRepository;
+import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import com.github.daanielowsky.FinalProject.services.OfferService;
 import com.github.daanielowsky.FinalProject.services.UserService;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,15 +36,25 @@ public class OfferController {
 
     private OfferService offerService;
     private UserService userService;
+    private UserRepository userRepository;
+    private OfferRepository offerRepository;
 
 
-    public OfferController(OfferService offerService) {
+    public OfferController(OfferService offerService, UserService userService, UserRepository userRepository, OfferRepository offerRepository) {
         this.offerService = offerService;
+        this.userService = userService;
+        this.userRepository = userRepository;
+        this.offerRepository = offerRepository;
     }
 
     @ModelAttribute("date")
     public String actualDate(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
+
+    @ModelAttribute("userprofile")
+    public User user(){
+        return userService.getLoggedUser();
     }
 
     @GetMapping("/addoffer")
@@ -95,24 +108,18 @@ public class OfferController {
         return "offerdetails";
     }
 
-//    @GetMapping("/deleteoffer")
-//    public String deleteOffer(@RequestParam Long id, HttpServletResponse resp){
-//        User loggedUser = userService.getLoggedUser();
-//        Long userId = loggedUser.getId();
-//        Long offerUserId = offerService.getOfferByID(id).getUser().getId();
-//        if (userId == offerUserId){
-//            offerService.deleteOffer(id);
-//            return "redirect:offers";
-//        } else {
-//            resp.setStatus(403);
-//            return "index";
-//        }
-//    }
-
     @GetMapping("/deleteoffer")
     public String deleteOffer(@RequestParam Long id){
-        offerService.deleteOffer(id);
-        return "youroffers";
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User byUsername = userRepository.findByUsername(username);
+        Long userId = byUsername.getId();
+        Long offerUserId = offerService.getOfferByID(id).getUser().getId();
+        if (userId == offerUserId){
+            offerService.deleteOffer(id);
+            return "redirect:/offers";
+        } else {
+            return "redirect:/forbidden";
+        }
     }
 
     @GetMapping("/editoffer")
@@ -131,7 +138,13 @@ public class OfferController {
         offerByID.setPrice(editoffer.getPrice());
         offerByID.setDescription(editoffer.getDescription());
         offerByID.setTitle(editoffer.getTitle());
+        offerRepository.save(offerByID);
         return "redirect:/offers";
+    }
+
+    @GetMapping("/forbidden")
+    public String forbidden(){
+        return "forbidden";
     }
 
 

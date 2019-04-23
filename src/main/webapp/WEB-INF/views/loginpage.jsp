@@ -40,13 +40,15 @@
     <div class="boxes">
         <p>
         <h2>Nie masz jeszcze konta? Zarejestruj się</h2></p>
-        <form:form modelAttribute="user" method="post" action="/register">
+        <form:form modelAttribute="user" method="post" action="/register" enctype="multipart/form-data">
             <p>Imię i nazwisko: <form:input cssClass="form-control" path="fullName"/>       <form:errors path="fullName" cssClass="alert alert-danger"/></p>
             <p>Nazwa użytkownika: <form:input cssClass="form-control" path="username" />       <form:errors path="username" cssClass="alert alert-danger"/> </p>
             <p>Email: <form:input cssClass="form-control" path="email" />       <form:errors path="email" cssClass="alert alert-danger"/> </p>
             <p>Numer telefonu: <form:input cssClass="form-control"  path="phoneNumber" />       <form:errors path="phoneNumber" cssClass="alert alert-danger"/> </p>
             <p>Hasło: <form:password cssClass="form-control" path="password"/>      <form:errors path="password" cssClass="alert alert-danger"/> </p>
             <p>Powtórz hasło: <form:password cssClass="form-control" path="confirmedPassword"/>      <form:errors path="confirmedPassword" cssClass="alert alert-danger"/> </p>
+            <p><input type="file" name="userImage"/></p>
+
             <br>
             <button class="btn btn-dark" >Zarejestruj się</button>
             <button class="btn btn-dark" type="reset">Reset</button>

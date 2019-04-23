@@ -3,16 +3,18 @@ package com.github.daanielowsky.FinalProject.services;
 
 import com.github.daanielowsky.FinalProject.dto.EditUserDTO;
 import com.github.daanielowsky.FinalProject.dto.RegistrationFormDTO;
+import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
 import com.github.daanielowsky.FinalProject.dto.UserDTO;
+import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -71,5 +73,22 @@ public class UserService {
         }
         logger.debug("Znaleziono użytkownika dla nazwy: " + username);
         return  convertToEditUserDTO(user);
+    }
+
+    @Transactional
+    public User getUserById(Long id){
+        User byId = userRepository.findById(id);
+        return byId;
+    }
+
+    public ResourceDTO getUserImage(Long id) {
+        ResourceDTO resourceDTO = new ResourceDTO();
+        User user = userRepository.findById(id);
+        if (user.getImageType() != null) {
+            ByteArrayResource resource = new ByteArrayResource(user.getFile());
+            resourceDTO.setResource(resource);
+            resourceDTO.setContentType(user.getImageType());
+        }
+        return resourceDTO;
     }
 }

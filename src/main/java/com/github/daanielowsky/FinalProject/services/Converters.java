@@ -20,6 +20,8 @@ public class Converters {
         user.setFullName(form.getFullName());
         user.setPassword(form.getPassword());
         user.setUsername(form.getUsername());
+        user.setImageType(form.getContentType());
+        user.setFile(form.getImage());
         return user;
     }
     public static EditUserDTO convertToEditUserDTO(User user) {
