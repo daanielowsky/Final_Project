@@ -1,11 +1,14 @@
 package com.github.daanielowsky.FinalProject.controllers;
 
 
+import com.github.daanielowsky.FinalProject.dto.CommentDTO;
 import com.github.daanielowsky.FinalProject.dto.EditUserDTO;
 import com.github.daanielowsky.FinalProject.dto.RegistrationFormDTO;
 import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
+import com.github.daanielowsky.FinalProject.entity.Comments;
 import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
+import com.github.daanielowsky.FinalProject.services.CommentsService;
 import com.github.daanielowsky.FinalProject.services.UserService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 public class LoginController {
@@ -27,10 +31,12 @@ public class LoginController {
 
     private UserRepository userRepository;
     private UserService userService;
+    private CommentsService commentsService;
 
-    public LoginController(UserRepository userRepository, UserService userService) {
+    public LoginController(UserRepository userRepository, UserService userService, CommentsService commentsService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.commentsService = commentsService;
     }
 
     @ModelAttribute("date")
@@ -88,6 +94,9 @@ public class LoginController {
     @GetMapping("/user/{id}")
     public String showProfile(@PathVariable Long id, Model model){
         User userById = userService.getUserById(id);
+        List<Comments> commentsForUser = commentsService.getCommentsForUser(id);
+        model.addAttribute("comments", commentsForUser);
+        model.addAttribute("addcomment", new CommentDTO());
         model.addAttribute("userdetails", userById);
         return "userdetails";
     }
