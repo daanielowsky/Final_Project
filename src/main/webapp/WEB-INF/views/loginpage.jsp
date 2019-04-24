@@ -47,7 +47,7 @@
             <p>Numer telefonu: <form:input cssClass="form-control"  path="phoneNumber" />       <form:errors path="phoneNumber" cssClass="alert alert-danger"/> </p>
             <p>Hasło: <form:password cssClass="form-control" path="password"/>      <form:errors path="password" cssClass="alert alert-danger"/> </p>
             <p>Powtórz hasło: <form:password cssClass="form-control" path="confirmedPassword"/>      <form:errors path="confirmedPassword" cssClass="alert alert-danger"/> </p>
-            <p><input type="file" name="userImage"/></p>
+            <p>Zdjęcie profilowe: <br><input type="file" name="userImage"/></p>
 
             <br>
             <button class="btn btn-dark" >Zarejestruj się</button>
