@@ -1,4 +1,4 @@
-<h1>Oferty lokalne Sellout
+<h1>Oferty lokalne Sellout</h1>
 
 Na tym repozytorium znajduje się projekt strony na oferty lokalne.
 
@@ -15,7 +15,7 @@ Na tym repozytorium znajduje się projekt strony na oferty lokalne.
 
 Całość owinięta w piękną szatę graficzną.
 
-<h2>Przed startem
+<h2>Przed startem</h2>
 
 * Utwórz bazę danych "finalproject" lub spersonalizuj pod swoją bazę danych w pliku ```/Final_Project/src/main/resources/application.properties```
 * Dodaj kategorie w bazie danych poprzez to Query:
