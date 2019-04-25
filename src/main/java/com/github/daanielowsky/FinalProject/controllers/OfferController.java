@@ -3,8 +3,10 @@ package com.github.daanielowsky.FinalProject.controllers;
 import com.github.daanielowsky.FinalProject.dto.EditOfferDTO;
 import com.github.daanielowsky.FinalProject.dto.OfferDTO;
 import com.github.daanielowsky.FinalProject.dto.ResourceDTO;
+import com.github.daanielowsky.FinalProject.entity.Category;
 import com.github.daanielowsky.FinalProject.entity.Offer;
 import com.github.daanielowsky.FinalProject.entity.User;
+import com.github.daanielowsky.FinalProject.repositories.CategoryRepository;
 import com.github.daanielowsky.FinalProject.repositories.OfferRepository;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import com.github.daanielowsky.FinalProject.services.OfferService;
@@ -36,13 +38,15 @@ public class OfferController {
     private UserService userService;
     private UserRepository userRepository;
     private OfferRepository offerRepository;
+    private CategoryRepository categoryRepository;
 
 
-    public OfferController(OfferService offerService, UserService userService, UserRepository userRepository, OfferRepository offerRepository) {
+    public OfferController(OfferService offerService, UserService userService, UserRepository userRepository, OfferRepository offerRepository, CategoryRepository categoryRepository) {
         this.offerService = offerService;
         this.userService = userService;
         this.userRepository = userRepository;
         this.offerRepository = offerRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @ModelAttribute("date")
@@ -157,7 +161,13 @@ public class OfferController {
     @GetMapping("/wishlist")
     public String showWishlist(Model model){
         Set<Offer> wishlist = userService.getLoggedUser().getWishlist();
+        List<Category> categories = categoryRepository.getAll();
+        Set<Category> usercategories = userService.getLoggedUser().getCategories();
+        logger.info("Kategorie wszystkie: " + categories);
+        logger.info("Kategorie uzytkownika: " + usercategories);
         model.addAttribute("wishlist", wishlist);
+        model.addAttribute("categories", categories);
+        model.addAttribute("userCategories", usercategories);
         return "wishlist";
     }
 
@@ -165,6 +175,22 @@ public class OfferController {
     public String deleteFromWishlist(@PathVariable Long id){
         User loggedUser = userService.getLoggedUser();
         loggedUser.getWishlist().remove(offerService.getOfferByID(id));
+        userRepository.save(loggedUser);
+        return "redirect:/wishlist";
+    }
+
+    @PostMapping("/wishlist/category")
+    public String addCategoryToWishlist(@RequestParam(required = false) List<String> category){
+        if (category == null) {
+            category = new ArrayList<>();
+        }
+        User loggedUser = userService.getLoggedUser();
+        Set<Category> categories = loggedUser.getCategories();
+        categories.clear();
+        for (String s : category){
+            categories.add(categoryRepository.getFirstByName(s));
+        }
+        loggedUser.setCategories(categories);
         userRepository.save(loggedUser);
         return "redirect:/wishlist";
     }

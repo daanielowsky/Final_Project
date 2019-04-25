@@ -16,6 +16,21 @@
 <body>
 <jsp:include page="header.jsp"/>
 <div class="container">
+    <h3>Subskrypcje kategorii:</h3>
+    <form method="post" action="/wishlist/category">
+        <c:forEach items="${categories}" var="category">
+            ${category.name}
+            <label class="switch">
+            <input type="checkbox" value="${category.name}"
+                                   name="category" ${userCategories.contains(category) ? 'checked' : ''}/>
+                <span class="slider round"></span>
+            </label>
+            <br>
+        </c:forEach>
+        <br>
+        <small id="emailHelp" class="form-text text-muted">Po zaznaczeniu subskrypcji kategorii będziesz informowany mailowo o nowych ofertach z danej kategorii.</small>
+        <button class="btn btn-dark" type="submit">Zapisz</button>
+    </form>
     <c:forEach items="${wishlist}" var="wishlist">
     <div>
         <a style="float: left" href="/offer/${wishlist.id}"><c:out value="${wishlist.title}"/></a>
@@ -23,12 +38,13 @@
         <div class="alert alert-secondary" role="alert">
             <c:out value="${wishlist.description}"/>
         </div>
-        <%--<form:form method="post" action="">--%>
-        <button class="btn btn-dark" type="submit" style="float: right" onclick="javascript:document.location.href='/wishlist/delete/${wishlist.id}'">Usuń</button>
-        <%--</form:form>--%>
+        <button class="btn btn-dark" type="submit" style="float: right"
+                onclick="javascript:document.location.href='/wishlist/delete/${wishlist.id}'">Usuń
+        </button>
         <br>
         <br>
-    </c:forEach>
+        </c:forEach>
     </div>
+</div>
 </body>
 </html>

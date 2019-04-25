@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,6 +39,25 @@ public class User {
 
     @Column(name = "image_type")
     private String imageType;
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    @ManyToMany
+    private Set<Category> categories = new HashSet<>();
 
     public byte[] getFile() {
         return file;
@@ -133,8 +153,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", file=" + Arrays.toString(file) +
-                ", imageType='" + imageType + '\'' +
-                ", wishlist=" + wishlist +
-                '}';
+                ", imageType='" + imageType + '\'';
     }
 }
