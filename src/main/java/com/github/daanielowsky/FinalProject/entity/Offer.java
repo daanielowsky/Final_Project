@@ -2,7 +2,9 @@ package com.github.daanielowsky.FinalProject.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "offer")
@@ -126,5 +128,26 @@ public class Offer {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Offer)) return false;
+        Offer offer = (Offer) o;
+        return Objects.equals(getId(), offer.getId()) &&
+                Objects.equals(getUser(), offer.getUser()) &&
+                Objects.equals(getTitle(), offer.getTitle()) &&
+                Objects.equals(getDescription(), offer.getDescription()) &&
+                Objects.equals(getCategory(), offer.getCategory()) &&
+                Objects.equals(getImageType(), offer.getImageType()) &&
+                Objects.equals(getCreated(), offer.getCreated()) &&
+                Objects.equals(getPrice(), offer.getPrice()) &&
+                Arrays.equals(getFile(), offer.getFile());
+    }
 
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getId(), getUser(), getTitle(), getDescription(), getCategory(), getImageType(), getCreated(), getPrice());
+        result = 31 * result + Arrays.hashCode(getFile());
+        return result;
+    }
 }

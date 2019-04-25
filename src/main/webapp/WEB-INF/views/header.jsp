@@ -23,14 +23,13 @@
 <sec:authorize access="isAuthenticated()">
     <div style="float: left; " id="data"> Teraz mamy: ${date}.</div>
     <div class="dropdown" style="float: right; padding: 10px">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
             Opcje
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="/editprofile">Edytuj profil</a>
             <a class="dropdown-item" href="/user/${userprofile.id}">Twój profil</a>
-            <a class="dropdown-item" href="/offers">Twoje oferty</a>
-            <a class="dropdown-item" href="/addoffer">Dodaj ofertę</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/logout">Wyloguj</a>
         </div>
@@ -41,6 +40,21 @@
     <br>
     <br>
     <p><a href="/"><img src="https://i.ibb.co/h1f24jy/cooltext321742886283374.png" border="0"></a></p>
+<sec:authorize access="isAuthenticated()">
+    <center>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="javascript:document.location.href='/addoffer'">
+                Dodaj ofertę
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="javascript:document.location.href='/offers'">Twoje
+                oferty
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="javascript:document.location.href='/wishlist'">
+                Wishlist
+            </button>
+        </div>
+    </center>
+</sec:authorize>
 </div>
 <div style="height: 40px">
     <form method="get" action="/searchoffers">

@@ -1,4 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -47,6 +48,12 @@
         <br>
 
     </center>
+    <sec:authorize access="isAuthenticated()">
+    <form:form method="post">
+    <button class="btn btn-dark" type="submit" style="float: right;margin-bottom: 10px">Dodaj to Wishlisty</button>
+    </form:form>
+    </sec:authorize>
+    <br>
 </div>
 </body>
 </html>

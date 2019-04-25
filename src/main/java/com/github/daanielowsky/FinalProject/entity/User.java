@@ -2,6 +2,9 @@ package com.github.daanielowsky.FinalProject.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -105,6 +108,20 @@ public class User {
         this.username = username;
     }
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_wishlist",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "offer_id"))
+    private Set<Offer> wishlist = new HashSet<>();
+
+    public Set<Offer> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(Set<Offer> wishlist) {
+        this.wishlist = wishlist;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -112,6 +129,12 @@ public class User {
                 ", fullName='" + fullName + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", created=" + created +
+                ", email='" + email + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                ", file=" + Arrays.toString(file) +
+                ", imageType='" + imageType + '\'' +
+                ", wishlist=" + wishlist +
                 '}';
     }
 }

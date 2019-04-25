@@ -25,9 +25,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class OfferController {
@@ -108,6 +106,15 @@ public class OfferController {
         return "offerdetails";
     }
 
+    @PostMapping("/offer/{id}")
+    public String addToWishlist(@PathVariable Long id){
+        User loggedUser = userService.getLoggedUser();
+        Offer offerByID = offerService.getOfferByID(id);
+        loggedUser.getWishlist().add(offerByID);
+        userRepository.save(loggedUser);
+        return "redirect:/offer/{id}";
+    }
+
     @GetMapping("/deleteoffer")
     public String deleteOffer(@RequestParam Long id){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -145,6 +152,21 @@ public class OfferController {
     @GetMapping("/forbidden")
     public String forbidden(){
         return "forbidden";
+    }
+
+    @GetMapping("/wishlist")
+    public String showWishlist(Model model){
+        Set<Offer> wishlist = userService.getLoggedUser().getWishlist();
+        model.addAttribute("wishlist", wishlist);
+        return "wishlist";
+    }
+
+    @GetMapping("/wishlist/delete/{id}")
+    public String deleteFromWishlist(@PathVariable Long id){
+        User loggedUser = userService.getLoggedUser();
+        loggedUser.getWishlist().remove(offerService.getOfferByID(id));
+        userRepository.save(loggedUser);
+        return "redirect:/wishlist";
     }
 
 

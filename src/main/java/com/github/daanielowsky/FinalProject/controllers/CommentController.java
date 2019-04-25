@@ -35,13 +35,13 @@ public class CommentController {
         return userService.getLoggedUser();
     }
 
-    @PostMapping("addcomment/{id}")
+    @PostMapping("/addcomment/{id}")
     public String addComment(@ModelAttribute("addcomment") @Valid CommentDTO commentDTO, BindingResult result, @PathVariable Long id){
         if (result.hasErrors()){
             return "userdetails";
         }
         Long id1 = userService.getLoggedUser().getId();
         commentsService.addComment(commentDTO, id1, id);
-        return "redirect:/";
+        return "redirect:/user/{id}";
     }
 }
