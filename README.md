@@ -11,7 +11,9 @@ Na tym repozytorium znajduje się projekt strony na oferty lokalne.
 * 10 Kategorii do zamieszczanych ofert,
 * Zdjęcie wystawianego produktu,
 * Możliwość komentowania profili użytkowników,
-* Wyszukiwarka ofert po nazwach i kategoriach.
+* Wyszukiwarka ofert po nazwach i kategoriach,
+* Dodawanie ofert do Wishlisty,
+* Subskrypcja mailowa kategorii (Użytkownik zostaje poinformowany mailowo o nowej ofercie z subskrybowanej kategorii).
 
 Całość owinięta w piękną szatę graficzną.
 
