@@ -5,6 +5,8 @@ import com.github.daanielowsky.FinalProject.dto.UserDTO;
 import com.github.daanielowsky.FinalProject.entity.User;
 import com.github.daanielowsky.FinalProject.repositories.UserRepository;
 import com.github.daanielowsky.FinalProject.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +23,7 @@ public class RegistrationController {
 
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     private UserRepository userRepository;
 
@@ -61,6 +64,7 @@ public class RegistrationController {
             result.rejectValue("username", null, "Nazwa użytkownika już zajęta.");
             return "registerpage";
         }
+        logger.info(form.toString());
         form.setContentType(userImage.getContentType());
         form.setImage(userImage.getBytes());
         userService.registerUser(form);

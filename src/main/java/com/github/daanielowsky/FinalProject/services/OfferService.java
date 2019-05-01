@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.daanielowsky.FinalProject.services.Converters.convertToDTO;
 import static com.github.daanielowsky.FinalProject.services.Converters.convertToOffer;
@@ -68,6 +69,12 @@ public class OfferService {
     @Transactional
     public Offer getOfferByID(Long id) {
         return offerRepository.getOne(id);
+    }
+
+
+    @Transactional
+    public Optional<Offer> getOptionalOffer(Long id){
+        return offerRepository.getOfferById(id);
     }
 
     @Transactional

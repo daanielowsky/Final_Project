@@ -103,8 +103,12 @@ public class OfferController {
 
     @GetMapping("/offer/{id}")
     public String showCertainOffer(@PathVariable Long id, Model model){
-        Offer dto = offerService.getOfferByID(id);
-        User user = dto.getUser();
+        Optional<Offer> dto = offerService.getOptionalOffer(id);
+        Offer offer = dto.orElse(null);
+        if (offer == null){
+            return "redirect:/";
+        }
+        User user = offer.getUser();
         model.addAttribute("dto", dto);
         model.addAttribute("user", user);
         return "offerdetails";
