@@ -2,6 +2,17 @@
 
 This repository contains API that pretents to be a webpage where u can sell your items for people in your area.
 
+Used Technologies:
+
+- Java,
+- Spring,
+- Spring Security,
+- Spring Boot,
+- Hibernate,
+- JSTL,
+- BootStrap,
+- Lombok (needed plugin for IntelliJ).
+
 Functionalities:
 
 * Logging,
@@ -39,6 +50,17 @@ insert into category(name) values
 <h1>Oferty lokalne Sellout</h1>
 
 Na tym repozytorium znajduje się projekt strony na oferty lokalne.
+
+Użyte technologie:
+
+- Java,
+- Spring,
+- Spring Security,
+- Spring Boot,
+- Hibernate,
+- JSTL,
+- BootStrap,
+- Lombok (needed plugin for IntelliJ).
 
 "Funkcjonalności":
 
