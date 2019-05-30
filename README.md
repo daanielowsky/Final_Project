@@ -1,4 +1,4 @@
-<h1>Things to sell in your Area- SellOuts</h1>
+<h1>Things for sell in your Area- SellOuts</h1>
 
 This repository contains API that pretents to be a webpage where u can sell your items for people in your area.
 
